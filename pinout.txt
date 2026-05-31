@@ -1,0 +1,25 @@
+Hydroponics pin mapping
+
+Sensors:
+- DHT22: DHT_PIN = GPIO5
+- TDS: TDS_PIN = GPIO32 (ADC)
+- pH: PH_PIN = GPIO33 (ADC)
+- Light: LIGHT_PIN = GPIO34 (ADC)
+
+Relays (active low):
+- Relay1: RELAY1_PIN = GPIO12
+- Relay2: RELAY2_PIN = GPIO14
+- Relay3: RELAY3_PIN = GPIO27
+- Relay4: RELAY4_PIN = GPIO26
+
+Switches (INPUT_PULLUP):
+- Switch1: SWITCH1_PIN = GPIO16 (RX2)
+- Switch2: SWITCH2_PIN = GPIO17 (TX2)
+
+I2C LCD (20x4, addr 0x27):
+- SDA: default I2C SDA for board
+- SCL: default I2C SCL for board
+
+Notes:
+- ADC attenuation set to 11dB for TDS, pH, Light.
+- ADC reference VREF = 3.3V, resolution = 12-bit (0-4095).
