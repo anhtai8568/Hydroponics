@@ -7,10 +7,10 @@ Sensors:
 - Light: LIGHT_PIN = GPIO34 (ADC)
 
 Relays (active low):
-- Relay1: RELAY1_PIN = GPIO12
-- Relay2: RELAY2_PIN = GPIO14
-- Relay3: RELAY3_PIN = GPIO27
-- Relay4: RELAY4_PIN = GPIO26
+- Relay1 (Den 1): RELAY_LIGHT_PIN = GPIO12
+- Relay2 (Quat 1): RELAY_FAN1_PIN = GPIO14
+- Relay3 (Quat 2): RELAY_FAN2_PIN = GPIO27
+- Relay4 (May bom): RELAY_PUMP_PIN = GPIO26
 
 Switches (INPUT_PULLUP):
 - Switch1: SWITCH1_PIN = GPIO16 (RX2)
@@ -23,3 +23,7 @@ I2C LCD (20x4, addr 0x27):
 Notes:
 - ADC attenuation set to 11dB for TDS, pH, Light.
 - ADC reference VREF = 3.3V, resolution = 12-bit (0-4095).
+
+
+#define BLYNK_TEMPLATE_NAME "Hydroponics"
+#define BLYNK_AUTH_TOKEN "LeF0NTZtY4-BDmVc2PCHTYq4a_UAQTX4"

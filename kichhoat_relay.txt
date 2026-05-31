@@ -1,0 +1,18 @@
+1. Relay 1 (Dieu khien den chieu sang)
+- Dieu kien ON: Bat den khi nut nhan tren ung dung Blynk o trang thai ON, hoac khi thoi gian hen gio > 1s.
+- Dieu kien OFF: Tat den khi sai ca hai dieu kien tren (nut nhan tren app = OFF va ngoai thoi gian hen gio).
+
+2. Relay 2 (Dieu khien quat so 1)
+- Dieu kien ON: Kich hoat trong 2 truong hop:
+  - Nhiet do > 25C va do am <= 80% (bat rieng quat 1 de hut khi nong ra, dua khi mat vao).
+  - Nhiet do > 25C va do am > 80% (bat cung luc ca 2 quat).
+- Dieu kien OFF: Tat khi nhiet do va do am moi truong khong roi vao cac nguong kich hoat ke tren.
+
+3. Relay 3 (Dieu khien quat so 2)
+- Dieu kien ON: Kich hoat trong 2 truong hop:
+  - Nhiet do <= 25C va do am > 80% (bat rieng quat 2 de phan phoi lai khong khi am, han che giam nhiet do).
+  - Nhiet do > 25C va do am > 80% (bat cung luc ca 2 quat).
+- Dieu kien OFF: Tat khi nhiet do va do am moi truong khong roi vao cac nguong kich hoat ke tren.
+
+4. Relay 4 (Dieu khien may bom nuoc)
+- Dieu kien ON/OFF: Khong co thuat toan kich hoat tu dong. Trong mo hinh hien tai, relay may bom duoc van hanh thu cong (nguoi dung tu bat/tat bang tay). Dieu nay giup nguoi dung chu dong dieu chinh tan suat va thoi luong bom dua tren nhu cau thuc te cua cay trong, dong thoi giup don gian hoa thiet ke va giam chi phi dau tu.
