@@ -3,15 +3,15 @@
 #include <math.h>
 #define BLYNK_TEMPLATE_ID "TMPL6GAJ-jvg8"
 #define BLYNK_TEMPLATE_NAME "Hydroponics"
-#define BLYNK_AUTH_TOKEN "LeF0NTZtY4-BDmVc2PCHTYq4a_UAQTX4"
+#define BLYNK_AUTH_TOKEN "DLMNY1esmf083JYxcYaBGmmLOGXxePuA"
 
 #define BLYNK_PRINT Serial
 
 #include <WiFi.h>
 #include <BlynkSimpleEsp32.h>
 
-char ssid[] = "Cun Cun";
-char pass[] = "12345689";
+char ssid[] = "Tai";
+char pass[] = "codaumahoi";
 
 // ============= PINS DEFINITION =============
 #define DHT_PIN 5
@@ -54,6 +54,18 @@ unsigned long light_timer_start = 0;
 
 unsigned long lastReadTime = 0;
 const unsigned long READ_INTERVAL = 2000;  // Read every 2 seconds
+
+// ============= CHANGE DETECTION =============
+float prevTemperature = -999;
+float prevHumidity = -999;
+float prevPhValue = -999;
+float prevTdsValue = -999;
+float prevLightValue = -999;
+const float TEMP_THRESHOLD = 0.5;
+const float HUM_THRESHOLD = 2.0;
+const float PH_THRESHOLD = 0.1;
+const float TDS_THRESHOLD = 20.0;
+const float LIGHT_THRESHOLD = 3.0;
 
 // ============= PH CALIBRATION =============
 const float pH_Cal = 0.009;  // Calibration value for pH sensor
@@ -424,49 +436,71 @@ void handleSwitches() {
 }
 
 void printSelected() {
+  bool changed = false;
+
   if (displayMode == 0) {
-    Serial.print("Temp: ");
-    Serial.print(temperature, 1);
-    Serial.println("C");
-  } else if (displayMode == 1) {
-    Serial.print("Humidity: ");
-    Serial.print(humidity, 0);
-    Serial.print("% | RAW: ");
-    Serial.print(dhtHumiRaw, 2);
-    Serial.print(" | OK: ");
-    Serial.println(dhtValid ? "YES" : "NO");
-  } else if (displayMode == 2) {
-    float phVoltage = phRaw * VREF / ADC_RESOLUTION;
-    Serial.print("pH: ");
-    Serial.print(phValue, 2);
-    Serial.print(" | RAW: ");
-    Serial.print(phRaw);
-    Serial.print(" (V:");
-    Serial.print(phVoltage, 2);
-    Serial.println(")");
-  } else if (displayMode == 3) {
-    float tdsVoltage = tdsRaw * VREF / ADC_RESOLUTION;
-    Serial.print("TDS: ");
-    Serial.print(tdsValue, 0);
-    Serial.print("ppm | RAW: ");
-    Serial.print(tdsRaw);
-    Serial.print(" (V:");
-    Serial.print(tdsVoltage, 2);
-    Serial.print(")");
-    if (tdsRaw >= ADC_SAT_THRESHOLD) {
-      Serial.print(" | SAT");
+    if (abs(temperature - prevTemperature) >= TEMP_THRESHOLD) {
+      Serial.print("Temp: ");
+      Serial.print(temperature, 1);
+      Serial.println("C");
+      prevTemperature = temperature;
+      changed = true;
     }
-    Serial.print(" | ADC%:");
-    Serial.println((tdsRaw * 100.0) / ADC_RESOLUTION, 1);
+  } else if (displayMode == 1) {
+    if (abs(humidity - prevHumidity) >= HUM_THRESHOLD) {
+      Serial.print("Humidity: ");
+      Serial.print(humidity, 0);
+      Serial.print("% | RAW: ");
+      Serial.print(dhtHumiRaw, 2);
+      Serial.print(" | OK: ");
+      Serial.println(dhtValid ? "YES" : "NO");
+      prevHumidity = humidity;
+      changed = true;
+    }
+  } else if (displayMode == 2) {
+    if (abs(phValue - prevPhValue) >= PH_THRESHOLD) {
+      float phVoltage = phRaw * VREF / ADC_RESOLUTION;
+      Serial.print("pH: ");
+      Serial.print(phValue, 2);
+      Serial.print(" | RAW: ");
+      Serial.print(phRaw);
+      Serial.print(" (V:");
+      Serial.print(phVoltage, 2);
+      Serial.println(")");
+      prevPhValue = phValue;
+      changed = true;
+    }
+  } else if (displayMode == 3) {
+    if (abs(tdsValue - prevTdsValue) >= TDS_THRESHOLD) {
+      float tdsVoltage = tdsRaw * VREF / ADC_RESOLUTION;
+      Serial.print("TDS: ");
+      Serial.print(tdsValue, 0);
+      Serial.print("ppm | RAW: ");
+      Serial.print(tdsRaw);
+      Serial.print(" (V:");
+      Serial.print(tdsVoltage, 2);
+      Serial.print(")");
+      if (tdsRaw >= ADC_SAT_THRESHOLD) {
+        Serial.print(" | SAT");
+      }
+      Serial.print(" | ADC%:");
+      Serial.println((tdsRaw * 100.0) / ADC_RESOLUTION, 1);
+      prevTdsValue = tdsValue;
+      changed = true;
+    }
   } else if (displayMode == 4) {
-    float lightVoltage = lightRaw * VREF / ADC_RESOLUTION;
-    Serial.print("Light: ");
-    Serial.print(lightValue, 0);
-    Serial.print("% | RAW: ");
-    Serial.print(lightRaw);
-    Serial.print(" (V:");
-    Serial.print(lightVoltage, 2);
-    Serial.println(")");
+    if (abs(lightValue - prevLightValue) >= LIGHT_THRESHOLD) {
+      float lightVoltage = lightRaw * VREF / ADC_RESOLUTION;
+      Serial.print("Light: ");
+      Serial.print(lightValue, 0);
+      Serial.print("% | RAW: ");
+      Serial.print(lightRaw);
+      Serial.print(" (V:");
+      Serial.print(lightVoltage, 2);
+      Serial.println(")");
+      prevLightValue = lightValue;
+      changed = true;
+    }
   }
 }
 
