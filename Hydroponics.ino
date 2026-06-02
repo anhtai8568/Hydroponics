@@ -10,17 +10,17 @@
 #include <WiFi.h>
 #include <BlynkSimpleEsp32.h>
 
-char ssid[] = "Tai";
-char pass[] = "codaumahoi";
+char ssid[] = "PHUNG NHAT NAM";
+char pass[] = "23456789";
 
 // ============= PINS DEFINITION =============
 #define DHT_PIN 5
 #define TDS_PIN 32
 #define PH_PIN 33
 #define LIGHT_PIN 34
-#define RELAY_LIGHT_PIN 12
+#define RELAY_LIGHT_PIN 27
 #define RELAY_FAN1_PIN 14
-#define RELAY_FAN2_PIN 27
+#define RELAY_FAN2_PIN 12
 #define RELAY_PUMP_PIN 26
 #define SWITCH1_PIN 16  // RX2
 #define SWITCH2_PIN 17  // TX2
@@ -129,7 +129,7 @@ BLYNK_WRITE(V13) {
   if (!autoMode) {
     relay_pump_state = param.asInt();
     digitalWrite(RELAY_PUMP_PIN,
-                 relay_pump_state ? LOW : HIGH);
+                 relay_pump_state ? HIGH : LOW);
   }
 }
 
@@ -153,11 +153,11 @@ void setup() {
   pinMode(SWITCH1_PIN, INPUT_PULLUP);
   pinMode(SWITCH2_PIN, INPUT_PULLUP);
 
-  // Turn off all relays initially (Active Low)
+  // Turn off all relays initially
   digitalWrite(RELAY_LIGHT_PIN, HIGH);
-  digitalWrite(RELAY_FAN1_PIN, HIGH);
+  digitalWrite(RELAY_FAN1_PIN, LOW);
   digitalWrite(RELAY_FAN2_PIN, HIGH);
-  digitalWrite(RELAY_PUMP_PIN, HIGH);
+  digitalWrite(RELAY_PUMP_PIN, LOW);
 
   // Configure ADC range for better voltage coverage on ESP32
   analogSetPinAttenuation(TDS_PIN, ADC_11db);
@@ -186,7 +186,7 @@ void loop() {
     controlLight();
     sendToBlynk();
     digitalWrite(RELAY_PUMP_PIN,
-             relay_pump_state ? LOW : HIGH);
+             relay_pump_state ? HIGH : LOW);
     displayLCD();
     printSelected();
     lastReadTime = millis();
@@ -513,7 +513,7 @@ void toggleRelay1() {
 
 void toggleRelay2() {
   relay_fan1_state = !relay_fan1_state;
-  digitalWrite(RELAY_FAN1_PIN, relay_fan1_state ? LOW : HIGH);  // Active Low
+  digitalWrite(RELAY_FAN1_PIN, relay_fan1_state ? LOW : HIGH);
   Serial.println(relay_fan1_state ? "Relay 2 ON" : "Relay 2 OFF");
 }
 
@@ -525,6 +525,6 @@ void toggleRelay3() {
 
 void toggleRelay4() {
   relay_pump_state = !relay_pump_state;
-  digitalWrite(RELAY_PUMP_PIN, relay_pump_state ? LOW : HIGH);  // Active Low
+  digitalWrite(RELAY_PUMP_PIN, relay_pump_state ? HIGH : LOW);
   Serial.println(relay_pump_state ? "Relay 4 ON" : "Relay 4 OFF");
 }
